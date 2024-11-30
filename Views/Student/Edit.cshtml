@@ -1,0 +1,377 @@
+﻿@model WebApplication1.Models.StudentsModel
+
+@{
+    if (Model.IsView)
+    {
+
+        ViewBag.Title = "View";
+    }
+    else
+    {
+        ViewBag.Title = "Edit";
+    }
+    ViewBag.SubTitle = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .HeaderClass {
+        background-color: #1b84ff !important;
+        color: white !important;
+        padding: 10px !important;
+    }
+
+    h5 {
+        margin-bottom: 15px;
+        margin-Top: 15px;
+        border-radius: 5px;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+<div class="row">
+    @using (Html.BeginForm("SaveEdit", "Student", FormMethod.Post, new { id = "frmData" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.StudentId)
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center flex-wrap gap-2">
+                    <div class="flex-grow-1">
+                        <h4>@ViewBag.Title</h4>
+                    </div>
+                </div>
+                <div class="d-flex flex-wrap gap-2 justify-content-end">
+                    <div class="hstack text-nowrap gap-2">
+                        @if (Model.IsView == true)
+                        {
+                            <a href="Edit?StudentId=@Model.StudentId&IsView=false" class="menu-link px-3 common-Icon" data-kt-customer-table-filter="edit_row"><i class="far fa-solid fa-pen-to-square text-hover-primary text-info fa-lg"></i></a>
+                        }
+                        <a class="btn btn-light-primary me-3" href="/Student/List">Back to List</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body p-10">
+                <div class="white-block">
+                    <div class="row">
+                        <h5 class="min-w-125px HeaderClass">Student Info</h5>
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.MobileNo, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.MobileNo, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.MobileNo, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Email, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @*<div class="col-md-4">
+            @Html.LabelFor(model => model.Gender, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.Gender, Model.GenderList, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Gender, htmlAttributes: new { @class = "control-label" })
+                            <div class="form-group">
+                                Male
+                                @Html.RadioButtonFor(model => model.Gender, "Male", new { @class = "control-label" })
+                                Female
+                                @Html.RadioButtonFor(model => model.Gender, "Female", new { @class = "control-label" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.State, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.State, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.State, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Country, new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.TextBoxFor(model => model.Country, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.District, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.TextBoxFor(model => model.District, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.District, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.CountryId, new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.DropDownListFor(model => model.CountryId, Model.CountryList, new { @class = "form-control form-solid-select", @id = "CountryId" })
+                                @Html.ValidationMessageFor(model => model.CountryId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.StateId, new { @class = "control-label" })
+                            <div class="form-group">
+                                @Html.DropDownList("StateId", null, "- Select -", new { @class = "form-control form-solid-select", @id = "StateId" })
+                                @Html.ValidationMessageFor(model => model.StateId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.DistrictId, new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.DropDownList("DistrictId", null, "- Select -", new { @class = "form-control form-solid-select", @id = "DistrictId" })
+                                @Html.ValidationMessageFor(model => model.DistrictId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.Address, new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.TextAreaFor(model => model.Address, new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.CheckBoxFor(model => model.IsActive, new { @class = "form-checkbox" })
+                                @Html.ValidationMessageFor(model => model.IsActive, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            @Html.LabelFor(model => model.EmployeeId, "Employee Name", new { @class = "control-label" })
+                            <div class=" form-group">
+                                @Html.DropDownListFor(model => model.EmployeeId, Model.EmployeeList, new { @class = "form-control form-solid-select", @id = "employeeDropdown" })
+                                @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="white-block">
+                        <div class="row" id="employeeDetails">
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.EFirstName, "First Name", new { @class = "control-label" })
+                                <div class=" form-group">
+                                    @Html.TextBoxFor(model => model.EFirstName, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.EFirstName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.ELastName, "Last Name", new { @class = "control-label" })
+                                <div class=" form-group">
+                                    @Html.TextBoxFor(model => model.ELastName, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.ELastName, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.EEmail, "Email", new { @class = "control-label" })
+                                <div class=" form-group">
+                                    @Html.TextBoxFor(model => model.EEmail, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.EEmail, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.EMobileNo, "Mobile Number", new { @class = "control-label" })
+                                <div class=" form-group">
+                                    @Html.TextBoxFor(model => model.EMobileNo, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.EMobileNo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                @Html.LabelFor(model => model.EAddress, "Address", new { @class = "control-label" })
+                                <div class="form-group">
+                                    @Html.TextAreaFor(model => model.EAddress, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.ValidationMessageFor(model => model.EAddress, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer p-10">
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-theme submit-data">Submit</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@section Scripts {
+
+    @* <script src="~/Scripts/jquery-3.4.1.js"></script>*@
+    <script>
+    $(document).ready(function () {
+        var IsView = '@Model.IsView';
+        if (IsView=='True') {
+            $("input").prop("disabled", true);
+            $("select").prop("disabled", true);
+            $("textarea").prop("disabled", true);
+            $("Button").prop("disabled", true);
+
+        }
+        else {
+            $("input").prop("disabled", false);
+            $("select").prop("disabled", false);
+            $("textarea").prop("disabled", false);
+        }
+    });
+    </script>
+
+
+    <script>
+    $(document).ready(function () {
+        $('#CountryId').change(function () {
+            var countryId = $(this).val(); // Get the selected country ID
+            if (countryId) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Student/GetState",
+                    data: { countryId: countryId }, // Pass countryId as parameter
+                    dataType: "json",
+                    success: function (data) {
+                        var stateDropdown = $('#StateId'); // Get the state dropdown
+                        stateDropdown.empty(); // Clear existing options
+                        var DistrictDropdown = $('#DistrictId'); // Get the District dropdown
+                        DistrictDropdown.empty(); // Clear existing options
+                        stateDropdown.append($('<option>').text('- Select -').attr('value', '0'));
+                        DistrictDropdown.append($('<option>').text('- Select -').attr('value', '0'));
+                        $.each(data, function (index, item) {
+                            stateDropdown.append($('<option>').text(item.Text).attr('value', item.Value));
+                        });
+                    }
+                });
+
+            } else {
+                stateDropdown: empty();
+                DistrictDropdown: empty();
+            }
+        });
+            $('#StateId').change(function () {
+                var StateId = $(this).val(); // Get the selected State ID
+                $.ajax({
+                    type: "POST",
+                    url: "/Student/GetDistrict",
+                    data: { StateId: StateId }, // Pass StateId as parameter
+                    dataType: "json",
+                    success: function (data) {
+                        var stateDropdown = $('#DistrictId'); // Get the state dropdown
+                        stateDropdown.empty(); // Clear existing options
+                        stateDropdown.append($('<option>').text('- Select -').attr('value', '0'));
+                        $.each(data, function (index, item) {
+                            stateDropdown.append($('<option>').text(item.Text).attr('value', item.Value));
+                        });
+                    }
+                });
+            });
+     function fetchEmployeeDetails(employeeId) {
+     if (employeeId) {
+         $.ajax({
+             url: '@Url.Action("GetEmployeeDetails", "Student")',
+             type: 'GET',
+             data: { EmployeeId: employeeId },
+             success: function (response) {
+                 var FirstName = $('#EFirstName');
+                 var LastName = $('#ELastName');
+                 var Email = $('#EEmail');
+                 var MobileNo = $('#EMobileNo');
+                 var Address = $('#EAddress');
+
+                 if (response.success) {
+                     FirstName.val(response.data.FirstName);
+                     LastName.val(response.data.LastName);
+                     Email.val(response.data.Email);
+                     MobileNo.val(response.data.MobileNo);
+                     Address.val(response.data.Address);
+
+                     // Show the fields
+                     FirstName.closest('.col-md-4').show();
+                     LastName.closest('.col-md-4').show();
+                     Email.closest('.col-md-4').show();
+                     MobileNo.closest('.col-md-4').show();
+                     Address.closest('.col-md-4').show();
+
+                 } else {
+                     FirstName.val('');
+                     LastName.val('');
+                     Email.val('');
+                     MobileNo.val('');
+                     Address.val('');
+
+                     // Hide the fields
+                     FirstName.closest('.col-md-4').hide();
+                     LastName.closest('.col-md-4').hide();
+                     Email.closest('.col-md-4').hide();
+                     MobileNo.closest('.col-md-4').hide();
+                     Address.closest('.col-md-4').hide();
+                 }
+             }
+         });
+     }
+ }
+
+ // Trigger fetchEmployeeDetails when dropdown value changes
+ $('#employeeDropdown').change(function () {
+     var employeeId = $(this).val();
+     fetchEmployeeDetails(employeeId);
+ });
+
+ // If EmployeeId is already selected, fetch the details
+ var selectedEmployeeId = $('#employeeDropdown').val();
+ if (selectedEmployeeId) {
+     fetchEmployeeDetails(selectedEmployeeId);
+ }
+ });
+    </script>
+    <script>
+        $(document).ready(function () {
+            $("#State").autocomplete({
+                source: function (request, response) {
+                    $.ajax({
+                        url: "/Student/GetStates",
+                        type: "POST",
+                        dataType: "json",
+                        data: { term: request.term },
+                        success: function (data) {
+                            response($.map(data, function (item) {
+                                return {
+                                    label: item.Text,
+                                    value: item.Value
+                                };
+                            }));
+                        }
+                    });
+                },
+                minLength: 1,
+                select: function (event, ui) {
+                    $('#State').val(ui.item.label); // display the selected text
+                    return false; // prevent the widget from inserting the value.
+                }
+            });
+        });
+    </script>
+}

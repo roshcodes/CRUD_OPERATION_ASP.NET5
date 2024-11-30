@@ -1,0 +1,139 @@
+﻿@model WebApplication1.Models.StudentsModel
+@{
+    ViewBag.Title = "Student List";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .HeaderClass {
+        background-color: #1b84ff !important;
+        color: white !important;
+        padding: 10px !important;
+    }
+</style>
+<div class="card">
+    <div class="card-header text-center" style="background-color:aquamarine">
+        <div class="d-flex flex-wrap gap-2 justify-content-lg-start mb-2">
+            <div class="hstack text-nowrap gap-2">
+                <h2 class="text-center">@ViewBag.Title</h2>
+            </div>
+        </div>
+        <div class="d-flex flex-wrap gap-2 justify-content-end mb-2">
+            <div class="hstack text-nowrap gap-2">
+                <a class="btn btn-primary me-3" href="/Student/Create"> Create</a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body pt-0">
+        <!--begin::Table-->
+        <div id="kt_customers_table_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+            <div class="table-responsive">
+                <table class="table table-striped align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="tblCustomer">
+                    <thead>
+                        <tr class="text-center text-gray-500 fw-bold fs-7 text-uppercase gs-0">
+                            <th class="min-w-75px sorting HeaderClass">Sr. No.</th>
+                            <th class="min-w-125px sorting_disabled HeaderClass">Actions</th>
+                            <th class="min-w-75px sorting HeaderClass">First Name</th>
+                            <th class="min-w-75px sorting HeaderClass">Last Name</th>
+                            <th class="min-w-75px sorting HeaderClass">Gender</th>
+                            <th class="min-w-125px sorting HeaderClass">Mobile No</th>
+                            <th class="min-w-125px sorting HeaderClass">Email</th>
+                            <th class="min-w-175px sorting HeaderClass">Address</th>
+                            <th class="min-w-75px sorting HeaderClass">IsActive</th>
+                            <th class="min-w-125px sorting HeaderClass">Created Date</th>
+                        </tr>
+                    </thead>
+                    <tbody class="fw-semibold text-gray-600 ">
+                        @{var i = 0; }
+                        @if (Model.StudentList.Count > 0)
+                        {
+                            foreach (var item in Model.StudentList)
+                            {
+                                <tr class="odd">
+                                    <td class="text-center">@(i+1)</td>
+                                    <td>
+                                        <a onclick="View('@item.StudentId')" class="menu-link px-3  cursor-pointer" data-kt-customer-table-filter="delete_row"><i class="far fa-solid fa-info-circle text-hover-primary text-warning"></i></a>
+                                        <a href="Edit?StudentId=@item.StudentId&IsView=true" class="menu-link px-3 " data-kt-customer-table-filter="delete_row"><i class="far fa-solid fa-eye text-hover-primary text-success"></i></a>
+                                        <a href="Edit?StudentId=@item.StudentId" class="menu-link px-3" data-kt-customer-table-filter="delete_row"><i class="far fa-solid fa-pen-to-square text-hover-primary text-info"></i></a>
+                                        <a href="Delete?StudentId=@item.StudentId" class="menu-link px-3 delete-link" data-kt-customer-table-filter="delete_row"><i class="far fa-solid fa-trash text-hover-primary text-danger"></i></a>
+                                    </td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.FirstName</td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.LastName</td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.Gender</td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.MobileNo</td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.Email</td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.Address</td>
+                                    <td class="@(!item.IsActive ? "text-danger" : "text-success")">
+                                        @(!item.IsActive ? "InActive" : "Active")
+                                    </td>
+                                    <td class="text-gray-600 text-hover-primary mb-1 table-col table_TD_color">@item.CreatedDateStr</td>
+                                </tr>
+                                i++;
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Start -->
+<div class="modal fade" id="basic-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon fs-2x">X</span>
+                </div>
+                <!--end::Close-->
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal" aria-label="Close">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Close -->
+
+
+<script src="~/Scripts/jquery-3.4.1.js"></script>
+<script src="~/Scripts/CommanValidation.js"></script>
+<script>
+    $(document).ready(function () {
+        var table = $('#tblCustomer').DataTable({
+            lengthMenu: [[10,25, 50, 100, -1], [10, 25,50, 100, "All"]],
+            pageLength: 10
+        });
+        // #mySearch is a <input type="text"> element
+        $('#mySearch').on('keyup', function () {
+            table.search(this.value).draw();
+        });
+});
+    function View(StudentId){
+        $.ajax({
+            type:"GET",
+            url:"/Student/View",
+            data: {StudentId:StudentId},
+            contentType: "application/json; charset=utf-8",
+            dataType: "html",
+            success: function (response){
+                $("#basic-modal").find('.modal-title').html('View Student Info');
+                $("#basic-modal").find('.modal-body').html(response);
+                $("#basic-modal").modal('show');
+                $('#basic-modal').modal('handleUpdate');
+            },
+            failure : function (response) {
+                alert(response.responseText);
+            },
+            error : function (response) {
+                alert(response.responseText);
+            }
+        });
+    }
+
+</script>
+

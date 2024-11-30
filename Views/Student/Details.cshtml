@@ -1,0 +1,110 @@
+﻿@model WebApplication1.Models.StudentsModel
+<style>
+    .HeaderClass {
+        background-color: #1b84ff !important;
+        color: white !important;
+        padding: 10px !important;
+    }
+
+    h5 {
+        margin-bottom: 15px;
+        margin-Top: 15px;
+        border-radius: 5px;
+    }
+
+    .error {
+        color: red;
+    }
+</style>
+<div class="row g-3 align-content-center" id="frmData">
+    <div class="row mb-3">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.FirstName, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.FirstName, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.LastName, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.LastName, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.MobileNo, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.MobileNo, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.MobileNo, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.Email, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.Email, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        @*<div class="col-sm-8">
+            @Html.LabelFor(model => model.person.Gender, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.DropDownListFor(model => model.person.Gender, Model.GenderList, new { @class = "form-select",@disabled="disabled", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.Gender, "", new { @class = "text-danger" })
+            </div>
+        </div>*@
+        <div class="form-group">
+            @Html.LabelFor(model => model.person.Gender, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-4">
+                Male
+                @Html.RadioButtonFor(model => model.person.Gender, "Male", new { @class = "control-label col-md-2" })
+                Female
+                @Html.RadioButtonFor(model => model.person.Gender, "Female", new { @class = "control-label col-md-2" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.State, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.State, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.State, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.Country, new { @class = "control-label" })
+            <div class=" form-group">
+                @Html.TextBoxFor(model => model.person.Country, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.Country, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+
+        <div class="col-sm-8">
+            @Html.LabelFor(model => model.person.District, new { @class = "control-label" })
+            <div class="form-group">
+                @Html.TextBoxFor(model => model.person.District, new { @class = "form-control", @readonly="readonly" })
+                @Html.ValidationMessageFor(model => model.person.District, "", new { @class = "text-danger" })
+            </div>
+        </div>
+    </div>
+    <div class="row mb-3">
+    </div>
+</div>
